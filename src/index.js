@@ -39,10 +39,10 @@ const MORSE_TABLE = {
 
 function decode(expr) {
 
-	let byTenDigitsArr = []
-	let byTwoDigitsArr = []
-	let morseEncodedArr = []
-	let resultArr = []
+	let byTenDigits = []
+	let byTwoDigits = []
+	let morseEncoded = []
+	let result = []
 
 	let getStrSlicedToArr = (str, sectionLength, arr) => {
 		for (let i = 0; i < str.length; i += sectionLength) {
@@ -50,52 +50,46 @@ function decode(expr) {
 		}
 	}
 
-	getStrSlicedToArr(expr, 10, byTenDigitsArr)
+	getStrSlicedToArr(expr, 10, byTenDigits)
 
-	byTenDigitsArr.forEach(el => {
+	byTenDigits.forEach(str => {
 
 		let arr = []
 
-		if (el.includes('**')) {
-			arr = [' ']
-		} else {
-			getStrSlicedToArr(el, 2, arr)
+		if (!str.includes('*')) {
+			getStrSlicedToArr(str, 2, arr)
 		}
-		byTwoDigitsArr.push(arr)
+		byTwoDigits.push(arr)
 	})
 
-	byTwoDigitsArr.forEach(twoDigitArr => {
+	byTwoDigits.forEach(twoDigitArr => {
 
 		let arr = []
 
-		if (twoDigitArr.includes(' ')) {
-			arr.push(' ')
-		}
-
 		twoDigitArr.forEach(el => {
-			if (el == '10') {
+			if (el === '10') {
 				arr.push('.')
-			} else if (el == '11') {
+			} else if (el === '11') {
 				arr.push('-')
 			}
 		})
-		morseEncodedArr.push(arr)
+		morseEncoded.push(arr)
 	})
 
-	morseEncodedArr.map(el => el = el.join('')).forEach(el => {
+	morseEncoded.map(el => el = el.join('')).forEach(el => {
 
-		if (el === ' ') {
-			resultArr.push(el)
+		if (el === '') {
+			result.push(' ')
 		}
 
 		for (let prop in MORSE_TABLE) {
 			if (prop === el) {
-				resultArr.push(MORSE_TABLE[prop])
+				result.push(MORSE_TABLE[prop])
 			}
 		}
 	})
 
-	return resultArr.join('')
+	return result.join('')
 }
 
 module.exports = {
